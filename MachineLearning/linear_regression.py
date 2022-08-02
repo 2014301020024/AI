@@ -36,13 +36,15 @@ class LinearRegession:
     def get_loss(self, y_pred, y):
         return 1 / y.shape[0] * np.linalg.norm(y_pred - y) * 1 / 2
 
-    def init_w(self, shape):
+    def init_w(self, shape, plus_w0=True):
         self.w = np.random.randn(shape, 1) * 0.01
-        self.w = np.concatenate((np.ones((1, 1)), self.w), axis=0)
+        if plus_w0:
+            self.w = np.concatenate((np.ones((1, 1)), self.w), axis=0)
 
-    def data_normalization(self):
+    def data_normalization(self, plus_w0=True):
         self.X = (self.X - self.X.mean(axis=0)) / self.X.std(axis=0)
-        self.X = np.concatenate((np.ones((self.n_samples, 1)), self.X), axis=1)
+        if plus_w0:
+            self.X = np.concatenate((np.ones((self.n_samples, 1)), self.X), axis=1)
 
     def train(self, batch_size=1, epoches=400, lr=0.01, method="SGD"):
         # split train valid set
