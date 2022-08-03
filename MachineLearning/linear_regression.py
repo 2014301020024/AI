@@ -5,6 +5,15 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
+def seed_all(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+def get_mse(y_pred, y):
+    return 1 / y.shape[0] * np.linalg.norm(y_pred - y) * 1 / 2
+
+
 class LinearRegession:
     def __init__(self, X=None, Y=None, seed=2022):
         if not X or not Y:
@@ -33,9 +42,6 @@ class LinearRegession:
         self.X = data
         self.Y = target
 
-    def get_loss(self, y_pred, y):
-        return 1 / y.shape[0] * np.linalg.norm(y_pred - y) * 1 / 2
-
     def init_w(self, shape, plus_w0=True):
         self.w = np.random.randn(shape, 1) * 0.01
         if plus_w0:
@@ -62,8 +68,8 @@ class LinearRegession:
         for i in range(epoches):
             y_pred_train = np.dot(train_X, self.w)
             y_pred_valid = np.dot(valid_X, self.w)
-            train_loss = self.get_loss(y_pred_train, train_Y)
-            valid_loss = self.get_loss(y_pred_valid, valid_Y)
+            train_loss = get_mse(y_pred_train, train_Y)
+            valid_loss = get_mse(y_pred_valid, valid_Y)
             self.loss_history.append([train_loss, valid_loss])
             if method == "SGD":
                 for j in range(0, n_samples, batch_size):
