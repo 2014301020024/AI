@@ -74,7 +74,7 @@ class LinearRegession:
             if method == "SGD":
                 for j in range(0, n_samples, batch_size):
                     diff_rad = y_pred_train[j: j + batch_size] - train_Y[j: j + batch_size]
-                    dw = (train_X[j: j + batch_size].T.dot(diff_rad)) / n_samples
+                    dw = (train_X[j: j + batch_size].T.dot(diff_rad)) / batch_size
                     self.w = self.w - lr * dw
 
                 pre = self.n_samples // batch_size * batch_size
